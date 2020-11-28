@@ -11,6 +11,9 @@ class VarCreator:
     return Variable(str(VarCreator.id))
 
 
+def var():
+  return VarCreator.create()
+
 
 def select(n, lst):
   c = Cnf()
@@ -39,14 +42,13 @@ def test_select():
   pass
 
 
-def test_var_creator():
-  v1 = VarCreator.create()
-  v2 = VarCreator.create()
-  v3 = VarCreator.create()
+def test_var():
+  v1 = var()
+  v2 = var()
+  v3 = var()
   print(v1, v2, v3)
   pass
 
 
 if __name__ == "__main__":
-  test_var_creator()
-  test_var_creator()
+  test_var()
