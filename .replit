@@ -1,2 +1,2 @@
 language = "bash"
-run = "apt-install minisat"
+run = "python slitherlink.py"

@@ -44,8 +44,7 @@ class SlitherLink:
   def rule_two(self):
     for node in self.table_edges.nodes():
       adjs = [self.table_edges.edges[node, adj]['var'] for adj in self.table_edges.adj[node]]
-      self.cnf &= select(2, adjs)
-
+      self.cnf &= (select(2, adjs) | select(0, adjs)) 
 
   def solve(self):
     solver = Minisat('minisat %s %s')
@@ -71,7 +70,8 @@ class SlitherLink:
       else:
         colors.append('w')
     nx.draw(self.table_edges, pos, node_color='k', node_size=0, edge_color=colors)
-    plt.show()
+    plt.savefig("drawEdge.png")
+    # plt.show()
 
 
 if __name__ == "__main__":
@@ -87,3 +87,4 @@ if __name__ == "__main__":
   slither_link.rule_one()
   slither_link.rule_two()
   slither_link.solve()
+  slither_link.show()
