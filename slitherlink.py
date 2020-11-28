@@ -5,6 +5,37 @@ from satispy import Variable, Cnf
 from satispy.solver import Minisat
 from Common import select
 
+
+class Id:
+  i = 0
+  def 
+
+class SlitherLink:
+  def __init__(self, table, height, width):
+    self.table = table
+    self.height = height
+    self.width = width
+
+  def set_table_nodes(self):
+    nx_table = nx.grid_2d_graph(self.height, self.width)
+    for node in nx_table.nodes:
+      row, column = node
+      nx_table.nodes[node]['value'] = self.table[row][column]
+    self.table_nodes = nx_table
+
+  def set_id(self):
+     Variable(str(id))
+    pass
+
+    lass MyClass:
+...     i = 3
+
+  def set_table_edges(self):
+    nx_table nx.grid_2d_graph(self.height + 1, self.width + 1)
+
+    pass
+
+
 # input data of slitherlink
 # Duong Manh
 # 11/11/2017
