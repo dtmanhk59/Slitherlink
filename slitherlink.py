@@ -43,8 +43,11 @@ class SlitherLink:
 
   def rule_two(self):
     for node in self.table_edges.nodes():
-      adjs = [self.table_edges.edges[node, adj]['var'] for adj in self.table_edges.adj[node]]
-      self.cnf &= (select(2, adjs) | select(0, adjs)) 
+      edges = [self.table_edges.edges[node, adj]['var'] for adj in self.table_edges.adj[node]]
+      self.cnf &= (select(2, edges) | select(0, edges)) 
+
+  def rule_three(self):
+    pass
 
   def solve(self):
     solver = Minisat('minisat %s %s')
