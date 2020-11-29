@@ -3,7 +3,7 @@ import networkx as nx
 import itertools
 from satispy import Variable, Cnf
 from satispy.solver import Minisat
-from Common import select, var
+from Common import select, var, MinisatSolver
 
 
 class SlitherLink:
@@ -44,19 +44,13 @@ class SlitherLink:
   def rule_two(self):
     for node in self.table_edges.nodes():
       edges = [self.table_edges.edges[node, adj]['var'] for adj in self.table_edges.adj[node]]
-      self.cnf &= (select(2, edges) | select(0, edges)) 
+      self.cnf &= (select(2, edges) | select(0, edges))
 
   def rule_three(self):
     pass
 
   def solve(self):
-    solver = Minisat('minisat %s %s')
-    print("Solving...")
-    solution = solver.solve(self.cnf)
-    if not solution.success:
-      print("not solution success")
-      exit()
-    print("Extracting solution...")
+    solution = MinisatSolver.slove(self.cnf)
     for edge in self.table_edges.edges():
       try:
         self.table_edges.edges[edge]['result'] = solution[self.table_edges.edges[edge]['var']]

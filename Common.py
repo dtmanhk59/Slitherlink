@@ -11,6 +11,18 @@ class VarCreator:
     return Variable(str(VarCreator.id))
 
 
+class MinisatSolver:
+  @staticmethod
+  def solve(cnf):
+    solver = Minisat('minisat %s %s')
+    solution = solver.solve(cnf)
+    if not solution.success:
+      print("not solution success")
+      exit()
+    print("Extracting solution...")
+    return solution
+
+
 def var():
   return VarCreator.create()
 
@@ -31,29 +43,43 @@ def select(n : int, lst: list):
   return c
 
 
-def add_one(number : Variable, result: Variable, pre_remember : Variable, remember: Variable) -> Cnf:
+def _add_one(number : Variable, result: Variable, pre_remember : Variable, remember: Variable) -> Cnf:
   cnf = Cnf()
   if pre_remember is None:
+    # a[0] <=> -b[0]
     cnf &= select(1, [number, result])
+    # c[0] <=> b[0]
     cnf &= select(1, [number, -remember])
   else:
-    cnf &= (select(1, [number, result, pre_remember])| select(3, [number, result, pre_remember]))
-    pass
+    # c[i] <=> b[i] ^ c[i-1]
+    cnf &= (-remember | number) & (-remember | pre_remember) & (-remember | -number | -pre_remember)
+    # a[i] <=> b[i] + c[i-1]
+    cnf &= (select(0, [number, result, pre_remember]) | select(2, [number, result, pre_remember]))
   return cnf
+
 
 def add_one(number : list, result : list, remember : list, length : int):
   cnf = Cnf()
-  for i in range(0, length):
-    cnf &= add_one(number[i], result[i], remember[i])
-  pass
+  cnf &= _add_one(number[0], result[0], None, remember[0])
+  for i in range(1, length):
+    cnf &= _add_one(number[i], result[i], remember[i-1], remember[i])
+  return cnf
 
+
+def test_add_one():
+  number = [var(), var()]
+  result = [var(), var()]
+  remember = [var(), var()]
+  cnf = add_one(number, result, remember, 2)
+  print(cnf)
 
 def test_select():
   v1 = Variable(str(1))
   v2 = Variable(str(2))
-  vs = [v1, v2]
-  vx = select(1, vs)
-  print(vx)
+  v3 = Variable(str(3))
+  vs = [v1, v2, v3]
+  cnf = select(2, vs) | select(0, vs)
+  print(cnf)
   pass
 
 
@@ -66,8 +92,5 @@ def test_var():
 
 
 if __name__ == "__main__":
-  #test_select()
-  n = var()
-  r = var()
-  re = var()
-  add_one(n, r, re)
+  # test_select()
+  test_add_one()
