@@ -1,2 +1,2 @@
 language = "bash"
-run = "python Common.py"
+run = "bash ./run.sh"

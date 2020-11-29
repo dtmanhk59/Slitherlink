@@ -50,7 +50,7 @@ class SlitherLink:
     pass
 
   def solve(self):
-    solution = MinisatSolver.slove(self.cnf)
+    solution = MinisatSolver.solve(self.cnf)
     for edge in self.table_edges.edges():
       try:
         self.table_edges.edges[edge]['result'] = solution[self.table_edges.edges[edge]['var']]
